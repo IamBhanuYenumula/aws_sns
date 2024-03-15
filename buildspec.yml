@@ -7,7 +7,7 @@ phases:
       - echo "Creating a virtual env"
       - python3 -m venv venv
       - echo "Activating my venv"
-      - source venv/bin/activate
+      - venv/bin/activate
       - echo "Installing dependencies...."
       - pip install -r requirements.txt -t lib
   build:
