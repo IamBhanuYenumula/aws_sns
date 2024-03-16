@@ -4,11 +4,7 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Creating a virtual env"
-      # - python3 -m venv venv
-      # - echo "Activating my venv"
-      # - chmod +x venv/bin/activate
-      # - venv/bin/activate
+
       - echo "Installing dependencies...."
       - pip install -r requirements.txt -t lib
   build:
