@@ -15,7 +15,7 @@ def lambda_handler(event, context):
                 "amount":round(random.uniform(10,100),2),
                 "date":((datetime.now().date()).strftime("%Y-%m-%d"))}
         data_list.append(data)
-    ex = json.dumps(data)
+    ex = json.dumps(data_list)
     
     s3_client.put_object(Bucket=bucket,Key=key,Body=ex)
     
