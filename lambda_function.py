@@ -1,7 +1,9 @@
 import json
 import random
+import pandas as pd
 from datetime import datetime
 import boto3
+
 # imp main module
 def lambda_handler(event, context):
     s3_client = boto3.client('s3')
