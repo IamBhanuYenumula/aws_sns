@@ -13,10 +13,11 @@ phases:
       - zip -r9 ../deployment_package.zip .
       - cd ..
       - zip -g deployment_package.zip lambda_function.py
+      - zip -g deployment_package.zip .env
   post_build:
     commands:
       - echo " Uploading to s3...."
       - aws s3 cp deployment_package.zip s3://cicd-packages/
       - echo "Updating Lambda function via s3...."
-      - aws lambda update-function-code --function-name amazonmachine-cicd --s3-bucket cicd-packages --s3-key deployment_package.zip
+      - aws lambda update-function-code --function-name read-json --s3-bucket cicd-packages --s3-key deployment_package.zip
       - echo "Deployment complete!..."

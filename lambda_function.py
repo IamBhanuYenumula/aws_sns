@@ -1,23 +1,53 @@
 import json
-import random
+import os
 import pandas as pd
 from datetime import datetime
+from dotenv import load_dotenv
 import boto3
+
+load_dotenv()
 
 # imp main module
 def lambda_handler(event, context):
-    s3_client = boto3.client('s3')
-    bucket = "gen-dd-json"
-    key = ((datetime.now().date()).strftime("%Y-%m-%d"))+"-"+"raw_input.json"
-    data_list = []
-    for i in range(10):
-        data = {"id": i+1,
-                "status":random.choice(["delivered","cancelled","order placed"]),
-                "amount":round(random.uniform(10,100),2),
-                "date":((datetime.now().date()).strftime("%Y-%m-%d"))}
-        data_list.append(data)
-    ex=json.dumps(data_list)   
-    s3_client.put_object(Bucket=bucket,Key=key,Body=ex)
+
+    sns_client = boto3.client('sns')
+    s3_client=boto3.client('s3')
+
+    bucket = event["Records"][0]['s3']["bucket"]["name"]
+    key = event["Records"][0]['s3']["object"]["key"]
+    response = s3_client.get_object(Bucket=bucket,Key=key)
+    file_content = response['Body'].read().decode('utf-')
+    
+    #JSON to pandas dataframe
+    data = pd.read_json(file_content)
+    data.set_index('id',inplace=True)
+
+    #Filter dataframe
+    transformed_data = data[data['status'] == 'delivered']
+    
+    #saving delivered status json to dd-transform-json
+    out_key = key[0:10]
+    body = transformed_data.to_csv(index=False)
+    output_bucket = os.getenv('output_bucket')
+    output_key = out_key+"_"+"transformed_output.csv"
+
+
+    try:     
+        #Adding transformed data to s3
+        s3_client.put_object(Bucket = output_bucket, Key = output_key, Body = body)
+        
+        #Sending message
+        message = "Data Transformation and loading SUCESSFUL!!!"
+        sns_client_response = sns_client.publish(Subject="Sucessfully transformed delivered data to s3",
+                                                TargetArn=os.getenv('sns_arn'),
+                                                Message=message, 
+                                                MessageStructure="text")     
+    except:
+        message = "Data Transformation and load FAILED!!!"
+        sns_client_response = sns_client.publish(Subject="ERROR!!! In data transformation and loading to s3",
+                                        TargetArn=os.getenv('sns_arn'),
+                                        Message=message, 
+                                        MessageStructure="text") 
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
