@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "status": "delivered",
+        "amount": 46.51,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 2,
+        "status": "delivered",
+        "amount": 79.51,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 3,
+        "status": "delivered",
+        "amount": 90.58,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 4,
+        "status": "cancelled",
+        "amount": 92.79,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 5,
+        "status": "cancelled",
+        "amount": 38.21,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 6,
+        "status": "delivered",
+        "amount": 81.33,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 7,
+        "status": "order placed",
+        "amount": 86.4,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 8,
+        "status": "cancelled",
+        "amount": 40.33,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 9,
+        "status": "cancelled",
+        "amount": 64.78,
+        "date": "2024-03-27"
+    },
+    {
+        "id": 10,
+        "status": "delivered",
+        "amount": 62.44,
+        "date": "2024-03-27"
+    }
+]
